@@ -8,10 +8,10 @@ const Navbar = () => {
 
   return (
     <div className="flex items-center justify-between py-5 font-medium">
-      <div className="flex gap-1 items-end">
+      <Link className="flex gap-1 items-end" to='/'>
         <h2 className="text-4xl">Collection</h2>
         <div className="w-[3px] h-[px] p-1 rounded-full bg-red-200"></div>
-      </div>
+      </Link>
       <ul className="hidden sm:flex gap-5 text-sm text-gray-700">
         {menu.map((item) => (
           <NavLink
