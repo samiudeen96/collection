@@ -8,7 +8,10 @@ const Navbar = () => {
 
   return (
     <div className="flex items-center justify-between py-5 font-medium">
-      <h2 className="text-4xl">Collection</h2>
+      <div className="flex gap-1 items-end">
+        <h2 className="text-4xl">Collection</h2>
+        <div className="w-[3px] h-[px] p-1 rounded-full bg-red-200"></div>
+      </div>
       <ul className="hidden sm:flex gap-5 text-sm text-gray-700">
         {menu.map((item) => (
           <NavLink
@@ -62,16 +65,22 @@ const Navbar = () => {
         }`}
       >
         <div className="flex flex-col text-gray-600">
-          <div className="flex items-center gap-3 p-3" onClick={() => setVisible(false)}>
-            <img
-              src={assets.dropdown_icon}
-              className="rotate-180 h-4"
-              alt=""
-            />
+          <div
+            className="flex items-center gap-3 p-3"
+            onClick={() => setVisible(false)}
+          >
+            <img src={assets.dropdown_icon} className="rotate-180 h-4" alt="" />
             <p>Back</p>
           </div>
-          {menu.map((item)=>(
-            <NavLink key={item.name} to={item.path} onClick={()=> setVisible(false)} className='py-2 pl-6 border-b-[0.5px] border-slate-200'>{item.name}</NavLink>
+          {menu.map((item) => (
+            <NavLink
+              key={item.name}
+              to={item.path}
+              onClick={() => setVisible(false)}
+              className="py-2 pl-6 border-b-[0.5px] border-slate-200"
+            >
+              {item.name}
+            </NavLink>
           ))}
         </div>
       </div>
