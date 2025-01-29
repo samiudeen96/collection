@@ -1,14 +1,30 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { useState } from "react";
+import { ShopContext } from "../context/ShopContext";
+import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
+  const { setShowSearch } = useContext(ShopContext);
+
+  const [searchVisible, setSearchVisible] = useState(false);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    // console.log(location.pathname);
+    if (location.pathname.includes("collection")) {
+      setSearchVisible(true);
+    } else {
+      setSearchVisible(false);
+    }
+  }, [location]);
 
   return (
     <div className="flex items-center justify-between py-5 font-medium">
-      <Link className="flex gap-1 items-end" to='/'>
+      <Link className="flex gap-1 items-end" to="/">
         <h2 className="text-4xl">Collection</h2>
         <div className="w-[3px] h-[px] p-1 rounded-full bg-red-200"></div>
       </Link>
@@ -26,7 +42,14 @@ const Navbar = () => {
       </ul>
 
       <div className="flex items-center gap-6">
-        <img className="w-5 cursor-pointer" src={assets.search_icon} alt="" />
+        {searchVisible && (
+          <img
+            onClick={() => setShowSearch(true)}
+            className="w-5 cursor-pointer"
+            src={assets.search_icon}
+            alt=""
+          />
+        )}
 
         <div className="group relative">
           <img
