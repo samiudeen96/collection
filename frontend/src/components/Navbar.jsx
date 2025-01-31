@@ -7,19 +7,21 @@ import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { setShowSearch } = useContext(ShopContext);
+  const { setShowSearch, searchVisible, setSearchVisible } = useContext(ShopContext);
 
-  const [searchVisible, setSearchVisible] = useState(false);
+  // const [searchVisible, setSearchVisible] = useState(false);
 
   const location = useLocation();
 
   useEffect(() => {
     // console.log(location.pathname);
-    if (location.pathname.includes("collection")) {
+    if (location.pathname === '/collection') {
       setSearchVisible(true);
     } else {
       setSearchVisible(false);
     }
+    console.log(location);
+    
   }, [location]);
 
   return (

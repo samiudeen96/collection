@@ -8,6 +8,7 @@ const ShopContextProvider = (props) => {
   const delivery_fee = 50;
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+  const [searchVisible, setSearchVisible] = useState(false);
 
   const value = {
     products,
@@ -17,6 +18,8 @@ const ShopContextProvider = (props) => {
     setSearch,
     showSearch,
     setShowSearch,
+    searchVisible, 
+    setSearchVisible
   };
 
   return (
