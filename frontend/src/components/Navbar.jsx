@@ -7,7 +7,8 @@ import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { setShowSearch, searchVisible, setSearchVisible } = useContext(ShopContext);
+  const { setShowSearch, searchVisible, setSearchVisible } =
+    useContext(ShopContext);
 
   // const [searchVisible, setSearchVisible] = useState(false);
 
@@ -15,13 +16,12 @@ const Navbar = () => {
 
   useEffect(() => {
     // console.log(location.pathname);
-    if (location.pathname === '/collection') {
+    if (location.pathname === "/collection") {
       setSearchVisible(true);
     } else {
       setSearchVisible(false);
     }
-    console.log(location);
-    
+    // console.log(location);
   }, [location]);
 
   return (
@@ -43,16 +43,17 @@ const Navbar = () => {
         ))}
       </ul>
 
-      <div className="flex items-center gap-6">
-        {searchVisible && (
-          <img
-            onClick={() => setShowSearch(true)}
-            className="w-5 cursor-pointer"
-            src={assets.search_icon}
-            alt=""
-          />
-        )}
-
+      <div className="flex items-center gap-6 sm:w-28">
+        <div className="sm:flex-1">
+          {searchVisible && (
+            <img
+              onClick={() => setShowSearch(true)}
+              className="w-5 cursor-pointer"
+              src={assets.search_icon}
+              alt=""
+            />
+          )}
+        </div>
         <div className="group relative">
           <img
             className="w-5 cursor-pointer"

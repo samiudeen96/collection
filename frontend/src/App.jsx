@@ -11,8 +11,18 @@ import Orders from "./pages/Orders";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SearchBar from "./components/searchBar";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const App = () => {
+  const { pathname, search } = useLocation(); // Tracks both path and query params
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // Smooth scroll to top
+    });
+  }, [pathname, search]); // Triggers scroll when path or query params change
+
   return (
     <>
       <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">

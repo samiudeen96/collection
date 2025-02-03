@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import Ratings from "../components/Ratings";
+import RelatedProduct from "../components/RelatedProduct";
 
 const Product = () => {
   const { productId } = useParams();
@@ -107,13 +108,26 @@ const Product = () => {
 
       <div className="mt-20">
         <div className="flex">
-          <b className="border border-gray-200 px-5 py-3 text-sm">Description</b>
-          <p className="border border-gray-200 px-5 py-3 text-sm">Review (122)</p>
+          <b className="border border-gray-200 px-5 py-3 text-sm">
+            Description
+          </b>
+          <p className="border border-gray-200 px-5 py-3 text-sm">
+            Review (122)
+          </p>
         </div>
         <div className="flex flex-col gap-4 border border-gray-200 px-6 py-6 text-sm text-gray-500">
-          <p>An e-commerce website is an online platform thatfacilitates the buying and selling the products.</p>
+          <p>
+            An e-commerce website is an online platform thatfacilitates the
+            buying and selling the products.
+          </p>
         </div>
       </div>
+
+      {/* -----------Display related products----------- */}
+      <RelatedProduct
+        category={selectedProduct.category}
+        subCategory={selectedProduct.subCategory}
+      />
     </div>
   ) : (
     <div>No product Found</div>
