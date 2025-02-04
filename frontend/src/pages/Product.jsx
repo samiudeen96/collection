@@ -7,7 +7,7 @@ import RelatedProduct from "../components/RelatedProduct";
 
 const Product = () => {
   const { productId } = useParams();
-  const { products, currency } = useContext(ShopContext);
+  const { products, currency, addToCart } = useContext(ShopContext);
   const [selectedProduct, setSelectedProduct] = useState(false);
   const [image, setImage] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
@@ -85,7 +85,7 @@ const Product = () => {
                 <button
                   onClick={() => setSelectedSize(item)}
                   className={`border py-2 px-4 cursor-pointer ${
-                    item == selectedSize ? "bg-black text-white" : "bg-gray-100"
+                    item === selectedSize ? "bg-black text-white" : "bg-gray-100"
                   }`}
                   key={index}
                 >
@@ -94,7 +94,7 @@ const Product = () => {
               ))}
             </div>
           </div>
-          <button className="bg-black text-white px-8 py-3 text-sm cursor-pointer active:bg-gray-700">
+          <button onClick={()=> addToCart(selectedProduct._id, selectedSize)} className="bg-black text-white px-8 py-3 text-sm cursor-pointer active:bg-gray-700">
             ADD TO CART
           </button>
           <hr className="mt-8 sm:w-4/5 border-gray-300" />

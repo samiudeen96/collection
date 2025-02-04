@@ -7,7 +7,7 @@ import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { setShowSearch, searchVisible, setSearchVisible } =
+  const { setShowSearch, searchVisible, setSearchVisible, getCartCount } =
     useContext(ShopContext);
 
   // const [searchVisible, setSearchVisible] = useState(false);
@@ -72,7 +72,7 @@ const Navbar = () => {
         <Link to="/cart" className="relative">
           <img className="w-5 min-w-5" src={assets.cart_icon} alt="" />
           <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px]">
-            10
+            {getCartCount()}
           </p>
         </Link>
 
