@@ -10,49 +10,56 @@ const ShopContextProvider = (props) => {
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
-  const [cartItmes, setCartItems] = useState({});
+  const [cartItems, setCartItems] = useState({});
 
   const addToCart = async (itemId, size) => {
     if (!size) {
       toast.error("Please select the size of the product");
       return;
     }
-    let cartData = structuredClone(cartItmes);
+    let cartData = structuredClone(cartItems);
+
+    // Checking if the Item Exists in the Cart
     if (cartData[itemId]) {
+      // Updating Quantity If Item & Size Exist
       if (cartData[itemId][size]) {
-        cartData[itemId][size] += 1;
+        cartData[itemId][size] += 1; // If Size Exists: Increase the quantity by 1.
       } else {
-        cartData[itemId][size] = 1;
+        cartData[itemId][size] = 1; // If Size Doesn’t Exist: Add the size with an initial quantity of 1.
       }
+
+      // Adding a New Item to the Cart
     } else {
-      cartData[itemId] = {};
-      cartData[itemId][size] = 1;
+      cartData[itemId] = {}; // Create an empty object {} for its sizes.
+      cartData[itemId][size] = 1; // Add the selected size with a quantity of 1.
     }
 
     setCartItems(cartData);
     toast.success("Product added to the cart successfully");
     console.log(cartData);
-    // return cartData;
   };
-
-  
 
   const getCartCount = () => {
     let totalCount = 0;
 
-    for (const items in cartItmes) {
-      // console.log(cartItmes[items]);
-      for (const item in cartItmes[items]) {
+    for (const items in cartItems) {
+      // console.log(cartItems[items]);
+      for (const item in cartItems[items]) {
         try {
-          if (cartItmes[items][item] > 0) {
-            totalCount = totalCount + cartItmes[items][item];
+          if (cartItems[items][item] > 0) {
+            totalCount = totalCount + cartItems[items][item];
           }
-        } catch (error) {
-
-        }
+        } catch (error) {}
       }
     }
     return totalCount;
+  };
+
+  const updateQuantity = async (itemId, size, quantity) => {
+    let cartData = structuredClone(cartItems);
+
+    cartData[itemId][size] = quantity;
+    setCartItems(cartData);
   };
 
   const value = {
@@ -65,9 +72,10 @@ const ShopContextProvider = (props) => {
     setShowSearch,
     searchVisible,
     setSearchVisible,
-    cartItmes,
+    cartItems,
     addToCart,
-    getCartCount
+    getCartCount,
+    updateQuantity, 
   };
 
   return (
