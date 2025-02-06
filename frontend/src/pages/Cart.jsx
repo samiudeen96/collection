@@ -80,9 +80,10 @@ const Cart = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-3 items-center">
+                <div className="flex gap-3 items-center flex-wrap justify-center">
                   <p>Quantity:</p>
                   <input
+                  onChange={(e)=> e.target.value === '' || e.target.value === '0' ? null : updateQuantity(item._id, item.size, Number(e.target.value))}
                     className="border border-gray-200 bg-slate-100 max-w-10 sm:max-w-20 px-1 sm:px-2 p-1"
                     type="number"
                     min={1}

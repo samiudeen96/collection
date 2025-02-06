@@ -62,6 +62,10 @@ const ShopContextProvider = (props) => {
     setCartItems(cartData);
   };
 
+  const getCartAmt =()=>{
+    
+  }
+
   const value = {
     products,
     currency,
