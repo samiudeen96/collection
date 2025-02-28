@@ -10,38 +10,23 @@ const Cart = () => {
   const [cartData, setCartData] = useState([]);
 
   useEffect(() => {
-    // const tempData = [];
-    // for (const items in cartItems) {
-    //   for (const item in cartItems[items]) {
-    //     if (cartItems[items][item] > 0) {
-    //       tempData.push({
-    //         _id: items,
-    //         size: item,
-    //         quantity: cartItems[items][item],
-    //       });
-    //     }
-    //   }
-    // }
-    // console.log(tempData);
-
-    const tempData = [];
-
-    Object.entries(cartItems).forEach(([itemId, sizes]) => {
-      if (typeof sizes == "object" && sizes !== null) {
-        Object.entries(sizes).forEach(([size, quantity]) => {
-          if (quantity > 0) {
+    if (products.length > 0) {
+      const tempData = [];
+      for (const items in cartItems) {
+        for (const item in cartItems[items]) {
+          if (cartItems[items][item] > 0) {
             tempData.push({
-              _id: itemId,
-              size: size,
-              quantity: quantity,
+              _id: items,
+              size: item,
+              quantity: cartItems[items][item],
             });
           }
-        });
+        }
       }
-    });
-    console.log(tempData);
-    setCartData(tempData);
-  }, [cartItems]);
+      // console.log(tempData);
+      setCartData(tempData);
+    }
+  }, [cartItems, products]);
 
   return (
     <div className=" pt-14">

@@ -5,10 +5,8 @@ import { backendUrl } from "../App";
 import { toast } from "react-toastify";
 
 const Add = ({ token }) => {
-  const [image1, setImage1] = useState(false);
-  const [image2, setImage2] = useState(false);
-  const [image3, setImage3] = useState(false);
-  const [image4, setImage4] = useState(false);
+  const [images, setImages] = useState(false);
+  const [previewImages, setPreviewImages] = useState({});
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -17,114 +15,84 @@ const Add = ({ token }) => {
   const [subCategory, setSubCategory] = useState("Topwear");
   const [bestseller, setBestseller] = useState(false);
   const [sizes, setSizes] = useState([]);
-
-  console.log(sizes);
+  const [loading, setLoading] = useState(false);
 
   const handleImage = (e) => {
     const file = e.target.files[0];
     const id = e.target.id;
-
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-
-      switch (id) {
-        case "image1":
-          setImage1(imageUrl);
-          break;
-
-        case "image2":
-          setImage2(imageUrl);
-          break;
-
-        case "image3":
-          setImage3(imageUrl);
-          break;
-
-        case "image4":
-          setImage4(imageUrl);
-          break;
-
-        default:
-          break;
-      }
+      setImages((prev) => ({ ...prev, [id]: file }));
+      setPreviewImages((prev) => ({
+        ...prev,
+        [id]: URL.createObjectURL(file),
+      }));
     }
   };
 
   const handleSizeClick = (size) => {
-    setSizes(
-      (prev) =>
-        prev.includes(size)
-          ? prev.filter((item) => item !== size) // Remove if already selected
-          : [...prev, size] // Add if not selected
+    setSizes((prev) =>
+      prev.includes(size)
+        ? prev.filter((item) => item !== size)
+        : [...prev, size]
     );
   };
 
   const onSubmitHandler = async (e) => {
-    console.log("isClicked");
-
     e.preventDefault();
+    setLoading(true); // Start loading
 
     try {
       const formData = new FormData();
-
       formData.append("name", name);
       formData.append("description", description);
       formData.append("price", price);
       formData.append("category", category);
       formData.append("subCategory", subCategory);
-      formData.append("bestseller", bestseller);
+      formData.append("bestseller", bestseller ? "true" : "false");
       formData.append("sizes", JSON.stringify(sizes));
 
-      image1 && formData.append("image1", image1);
-      image2 && formData.append("image2", image2);
-      image3 && formData.append("image3", image3);
-      image4 && formData.append("image4", image4);
+      Object.keys(images).forEach((key) => {
+        formData.append(key, images[key]);
+      });
 
       const response = await axios.post(
         `${backendUrl}/api/product/add`,
         formData,
-        { headers: { token } }
+        {
+          headers: { token },
+        }
       );
-      console.log(response.data);
 
       if (response.data.success) {
+        formReset();
         toast.success(response.data.message);
-        setName("");
-        setDescription("");
-        setImage1(false);
-        setImage2(false);
-        setImage3(false);
-        setImage4(false);
-        setPrice("");
-        setBestseller(false);
-        setSizes([])
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.log(error);
-      toast.error(error.message);
+      console.error(error);
+      toast.error("Failed to add product");
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
-  const labelArr = [
-    {
-      id: "image1",
-      img: image1 || assets.upload_area,
-    },
-    {
-      id: "image2",
-      img: image2 || assets.upload_area,
-    },
-    {
-      id: "image3",
-      img: image3 || assets.upload_area,
-    },
-    {
-      id: "image4",
-      img: image4 || assets.upload_area,
-    },
-  ];
+  const formReset = () => {
+    setName("");
+    setDescription("");
+    setPrice("");
+    setCategory("Men");
+    setSubCategory("Topwear");
+    setBestseller(false);
+    setSizes([]);
+    setImages(false);
+    setPreviewImages({});
+  };
+
+  const labelArr = ["image1", "image2", "image3", "image4"].map((id) => ({
+    id,
+    img: previewImages[id] || assets.upload_area,
+  }));
 
   return (
     <form
@@ -235,9 +203,13 @@ const Add = ({ token }) => {
           Add to bestseller
         </label>
       </div>
-
-      <button type="submit" className="w-28 py-3 mt-4 bg-black text-white">
-        ADD
+      
+      <button
+        type="submit"
+        className="w-28 py-3 mt-4 bg-black text-white flex items-center justify-center"
+        disabled={loading} // Disable button when loading
+      >
+        {loading ? "Adding..." : "ADD"}
       </button>
     </form>
   );

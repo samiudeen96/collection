@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { useParams } from "react-router-dom";
-import { ShopContext } from "../context/ShopContext";
+import { ShopContext } from "../context/shopContext";
 import Ratings from "../components/Ratings";
 import RelatedProduct from "../components/RelatedProduct";
 
@@ -25,17 +25,10 @@ const Product = () => {
       return item._id === productId;
     });
 
-    // return newObj = {
-    //   itemId: item._id === productId,
-    //   itemImage:setImage(item)
-    // }
-
     setSelectedProduct(productFound || false);
     setImage(productFound.image[0]);
     console.log(image);
 
-    // const productFound = products.filter((item)=> item._id === productId);
-    // setSelectedProduct(productFound || false)
   };
 
   useEffect(() => {

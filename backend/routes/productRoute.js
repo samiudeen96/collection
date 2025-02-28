@@ -8,9 +8,9 @@ import {
 import upload from "../middleware/multer.js";
 import adminAuth from "../middleware/adminAuth.js";
 
-const productRoute = express.Router();
+const productRouter = express.Router();
 
-productRoute.post(
+productRouter.post(
   "/add",
   adminAuth,
   upload.fields([
@@ -21,8 +21,8 @@ productRoute.post(
   ]),
   addProduct
 );
-productRoute.get("/list", listProduct);
-productRoute.delete("/remove", adminAuth, removeProduct);
-productRoute.get("/single/:id", singleProduct);
+productRouter.get("/list", listProduct);
+productRouter.post("/remove", adminAuth, removeProduct);
+productRouter.get("/single/:id", singleProduct);
 
-export default productRoute;
+export default productRouter;

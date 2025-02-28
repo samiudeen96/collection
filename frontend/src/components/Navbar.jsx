@@ -7,12 +7,27 @@ import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { setShowSearch, searchVisible, setSearchVisible, getCartCount } =
-    useContext(ShopContext);
+  const {
+    setShowSearch,
+    searchVisible,
+    setSearchVisible,
+    getCartCount,
+    navigate,
+    token,
+    setToken,
+    setCartItems,
+  } = useContext(ShopContext);
 
   // const [searchVisible, setSearchVisible] = useState(false);
 
   const location = useLocation();
+
+  const logout = () => {
+    navigate("/login");
+    localStorage.removeItem("token");
+    setToken("");
+    setCartItems({});
+  };
 
   useEffect(() => {
     // console.log(location.pathname);
@@ -55,19 +70,31 @@ const Navbar = () => {
           )}
         </div>
         <div className="group relative">
-          <Link to={'/login'}>
-            <img
-              className="w-5 cursor-pointer"
-              src={assets.profile_icon}
-              alt=""
-            />
-          </Link>
+          {/* <Link to={'/login'}> */}
+          <img
+            onClick={() => (token ? null : navigate("/login"))}
+            className="w-5 cursor-pointer"
+            src={assets.profile_icon}
+            alt=""
+          />
+          {/* </Link> */}
           <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
-            <div className="flex flex-col gap-2 w-36 py-3 px-3 bg-slate-100 text-gray-500 rounded">
-              <Link className="cursor-pointer hover:text-black">My Profile</Link>
-              <Link to={'/orders'} className="cursor-pointer hover:text-black">Orders</Link>
-              <p className="cursor-pointer hover:text-black">Logout</p>
-            </div>
+            {token && (
+              <div className="flex flex-col gap-2 w-36 py-3 px-3 bg-slate-100 text-gray-500 rounded">
+                <Link className="cursor-pointer hover:text-black">
+                  My Profile
+                </Link>
+                <Link
+                  to={"/orders"}
+                  className="cursor-pointer hover:text-black"
+                >
+                  Orders
+                </Link>
+                <p className="cursor-pointer hover:text-black" onClick={logout}>
+                  Logout
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
