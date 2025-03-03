@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { useState } from "react";
-import { ShopContext } from "../context/ShopContext";
+import { ShopContext } from "../context/shopContext";
 import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
