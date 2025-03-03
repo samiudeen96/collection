@@ -14,6 +14,7 @@ import SearchBar from "./components/searchBar";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
+import Verify from './pages/verifyPayment' 
 
 const App = () => {
   const { pathname, search } = useLocation(); // Tracks both path and query params
@@ -40,6 +41,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/place-order" element={<PlaceOrder />} />
           <Route path="/orders" element={<Orders />} />
+          <Route path="/verify" element={<Verify />} />
         </Routes>
         <Footer />
       </div>

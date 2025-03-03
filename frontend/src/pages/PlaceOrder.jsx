@@ -13,20 +13,50 @@ const PlaceOrder = () => {
     lastName: "",
     email: "",
     street: "",
-    city: "",  
+    city: "",
     state: "",
     zipcode: "",
     country: "",
     phone: "",
   });
 
-
-
   const onChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
 
     setFormData((data) => ({ ...data, [name]: value }));
+  };
+
+  const initPay = (order) => {
+    const options = {
+      key: import.meta.env.VITE_RZP_KEY_SECRET,
+      amount: order.amount,
+      currency: order.currency,
+      name: "Order Payment",
+      description: "Order Payment",
+      order_id: order.id,
+      receipt: order.receipt,
+      handler: async (response) => {
+        console.log(response);
+        try {
+          const { data } = await axios.post(
+            `${backendUrl}/api/order/verifyRzp`,
+            response,
+            { headers: { token } }
+          );
+
+          if (data.success) {
+            navigate("/orders");
+            setCartItems({});
+          }
+        } catch (error) {
+          console.log(error);
+          toast.error(error);
+        }
+      },
+    };
+    const rzp = new window.Razorpay(options);
+    rzp.open();
   };
 
   const {
@@ -37,7 +67,7 @@ const PlaceOrder = () => {
     setCartItems,
     delivery_fee,
     products,
-    getCartAmt
+    getCartAmt,
   } = useContext(ShopContext);
 
   const onSubmitHandler = async (event) => {
@@ -69,20 +99,49 @@ const PlaceOrder = () => {
 
       switch (mode) {
         case "cod":
-          const response = await axios.post(
+          const responseCod = await axios.post(
             `${backendUrl}/api/order/cod`,
             orderData,
             { headers: { token } }
           );
-          
-          // console.log(response.data);
-          
-          if (response.data.success) {
+
+          // console.log(responseCod.data);
+
+          if (responseCod.data.success) {
             setCartItems({});
             navigate("/orders");
           } else {
-            toast.error(response.data.message);
+            toast.error(responseCod.data.message);
           }
+          break;
+
+        case "stripe":
+          const responseStripe = await axios.post(
+            `${backendUrl}/api/order/stripe`,
+            orderData,
+            { headers: { token } }
+          );
+
+          if (responseStripe.data.success) {
+            const { session_url } = responseStripe.data;
+            window.location.replace(session_url);
+          } else {
+            toast.error(responseStripe.data.message);
+          }
+          break;
+
+        case "razorpay":
+          const responseRzp = await axios.post(
+            `${backendUrl}/api/order/razorpay`,
+            orderData,
+            { headers: { token } }
+          );
+
+          if (responseRzp.data.success) {
+            initPay(responseRzp.data.order);
+            console.log(responseRzp.data.order);
+          }
+
           break;
 
         default:
@@ -95,7 +154,10 @@ const PlaceOrder = () => {
   };
 
   return (
-    <form onSubmit={onSubmitHandler} className="flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t border-gray-200">
+    <form
+      onSubmit={onSubmitHandler}
+      className="flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t border-gray-200"
+    >
       <div className="flex flex-col gap-4 w-full sm:max-w-[480px]">
         <div className="text-xl sm:text-2xl my-3">
           <Title text1={"DELIVERY"} text2={"INFORMATION"} />

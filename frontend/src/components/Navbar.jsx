@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { useState } from "react";
@@ -20,7 +20,22 @@ const Navbar = () => {
 
   // const [searchVisible, setSearchVisible] = useState(false);
 
+  const [isOpen, setIsOpen] = useState(false);
+
   const location = useLocation();
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const logout = () => {
     navigate("/login");
@@ -69,33 +84,45 @@ const Navbar = () => {
             />
           )}
         </div>
-        <div className="group relative">
-          {/* <Link to={'/login'}> */}
+        <div className="relative" ref={dropdownRef}>
+          {/* Profile Icon (Click to toggle dropdown) */}
           <img
-            onClick={() => (token ? null : navigate("/login"))}
+            onClick={() => {
+              if (token) {
+                setIsOpen(!isOpen);
+              } else {
+                navigate("/login");
+              }
+            }}
             className="w-5 cursor-pointer"
             src={assets.profile_icon}
-            alt=""
+            alt="Profile"
           />
-          {/* </Link> */}
-          <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
-            {token && (
-              <div className="flex flex-col gap-2 w-36 py-3 px-3 bg-slate-100 text-gray-500 rounded">
-                <Link className="cursor-pointer hover:text-black">
-                  My Profile
-                </Link>
-                <Link
-                  to={"/orders"}
-                  className="cursor-pointer hover:text-black"
-                >
-                  Orders
-                </Link>
-                <p className="cursor-pointer hover:text-black" onClick={logout}>
-                  Logout
-                </p>
-              </div>
-            )}
-          </div>
+
+          {/* Dropdown Menu */}
+          {isOpen && token && (
+            <div className="absolute right-0 mt-2 w-36 py-3 px-3 space-y-2 bg-slate-100 text-gray-500 rounded shadow-lg">
+              {/* {token ? ( */}
+                <>
+                  {/* <Link className="block cursor-pointer hover:text-black">
+                    My Profile
+                  </Link> */}
+                  <Link
+                    to="/orders"
+                    className="block cursor-pointer hover:text-black"
+                  >
+                    Orders
+                  </Link>
+                  <p
+                    className="block cursor-pointer hover:text-black"
+                    onClick={logout}
+                  >
+                    Logout
+                  </p>
+                </>
+              {/* ) : null} */}
+            </div>
+          )}
         </div>
 
         <Link to="/cart" className="relative">
