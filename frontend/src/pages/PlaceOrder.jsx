@@ -140,8 +140,9 @@ const PlaceOrder = () => {
           if (responseRzp.data.success) {
             initPay(responseRzp.data.order);
             console.log(responseRzp.data.order);
+          } else {
+            toast.error(responseStripe.data.message);
           }
-
           break;
 
         default:

@@ -9,7 +9,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
-  const { token, setToken, backendUrl, navigate } = useContext(ShopContext);
+  const { token, setToken, backendUrl, navigate, setCartItems } = useContext(ShopContext);
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
@@ -43,6 +43,7 @@ const Login = () => {
         // console.log(response.data);
       
         if(response.data.success){
+          setCartItems({})
           setToken(response.data.token);
           localStorage.setItem('token', response.data.token);
         }else{

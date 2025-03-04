@@ -119,7 +119,6 @@ const verifyStripe = async (req, res) => {
 const placeOrderRazorpay = async (req, res) => {
   try {
     const { userId, items, amount, address } = req.body;
-    const { orgin } = req.headers;
 
     const orderData = {
       userId,
